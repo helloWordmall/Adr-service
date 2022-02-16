@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adr.repository.AdrCheckRepository">
+
+    <select id="selectPartAge" resultType="com.adr.entity.User">
+            select id,hospId,age from adr_age2 where id = #{id};
+    </select>
+
+    <select id="selectAdrAge" resultType="map">
+            select hospId ,count(hospId) as times from adr_age group by hospId
+            having count(hospId) > 1;
+    </select>
+
+    <select id="selectAdrRepeatData" resultType="map">
+            select hospId, count(hospId) as times from adr_orgin group by hospId
+            having count(hospId) > 1;
+    </select>
+
+    <select id="selectRepeatData" resultType="map">
+            select o.hospId from origin o,adjust a where o.hospId=a.hospId
+    </select>
+    
+    <select id="selectRepeatAdjust" resultType="map">
+            select hospId from adjust WHERE hospId
+ 				in 
+ 			(select hospId from adjust group by hospId having count(hospId)>1)
+    </select>
+    
+    <select id="selectRepeatOrigin" resultType="map">
+            select hospId from origin WHERE hospId
+ 				in 
+ 			(select hospId from origin group by hospId having count(hospId)>1)
+    </select>
+
+    <select id="selectHospId" resultType="int" parameterType="int">
+        select hospId from origin where id=#{id}
+    </select>
+
+</mapper>
